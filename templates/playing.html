@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mastermind</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/logo.png') }}" />
+        <style>
+            .ball-cheat {
+                display: inline-block;
+                width: 25px;
+                height: 25px;
+                border-radius: 85%;
+                background-color: grey;
+                margin-right: 120px;
+            }
+            .color-ball {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background-color: grey;
+                margin-right: 5px;
+            }
+            .color-ball-choice {
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                border-radius: 85%;
+                background-color: grey;
+                margin-right: 100px;
+            }
+            .color-input {
+                display: none;
+            }
+            .cheat-button {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+            }
+        </style>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const colorMap = {
+                    "p": "purple",
+                    "y": "yellow",
+                    "b": "blue",
+                    "g": "green"
+                };
+
+                function changeColor(ball, direction) {
+                    const currentColorIndex = Object.values(colorMap).indexOf(ball.style.backgroundColor);
+                    const newColorIndex = (currentColorIndex + direction + Object.keys(colorMap).length) % Object.keys(colorMap).length;
+                    const newColorKey = Object.keys(colorMap)[newColorIndex];
+                    ball.style.backgroundColor = colorMap[newColorKey];
+                    ball.nextElementSibling.value = newColorIndex + 1;
+                }
+
+                function focusAdjacentBall(ball, direction) {
+                    const balls = Array.from(document.querySelectorAll(".color-ball-choice"));
+                    const currentIndex = balls.indexOf(ball);
+                    const newIndex = (currentIndex + direction + balls.length) % balls.length;
+                    balls[newIndex].focus();
+                }
+
+                document.querySelectorAll(".color-ball-choice").forEach(function (ball) {
+                    ball.addEventListener("click", function () {
+                        ball.focus();
+                    });
+                    ball.addEventListener("keydown", function (event) {
+                        const colorKey = event.key.toLowerCase();
+                        if (colorMap[colorKey]) {
+                            ball.style.backgroundColor = colorMap[colorKey];
+                            ball.nextElementSibling.value = Object.keys(colorMap).indexOf(colorKey) + 1;
+                        } else if (event.key === "ArrowUp") {
+                            changeColor(ball, 1);
+                        } else if (event.key === "ArrowDown") {
+                            changeColor(ball, -1);
+                        } else if (event.key === "ArrowRight") {
+                            focusAdjacentBall(ball, 1);
+                        } else if (event.key === "ArrowLeft") {
+                            focusAdjacentBall(ball, -1);
+                        }
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <h1>Mastermind</h1>
+        {% if cheat_mode %}
+            <h2>Cheat Mode Activated: Secret Combination :</h2>
+            {% for color in game.secret_code %}
+                <div class="ball-cheat" style="background-color: {{ ['purple', 'yellow', 'blue', 'green'][color - 1] }};"></div>
+            {% endfor %}
+        {% endif %}
+        <div class="cheat-button">
+            <form action="{{ url_for('index') }}" method="get">
+                <input type="hidden" name="cheat" value="true">
+                <input type="submit" value="Activate Cheat Mode">
+            </form>
+        </div>
+
+        <form action="{{ url_for('guess') }}" method="post">
+            <input type="hidden" name="cheat" value="{{ cheat_mode }}">
+                {% for i in range(1, 5) %}
+                    <div class="color-ball-choice" tabindex="0"></div>
+                    <input class="color-input" type="number" id="color_{{ i }}" name="color_{{ i }}" min="1" max="4" required>
+                {% endfor %}
+            <input type="submit" value="Submit">
+        </form>
+
+        <table>
+            <tr>
+                <th>Choice #1</th>
+                <th>Choice #2</th>
+                <th>Choice #3</th>
+                <th>Choice #4</th>
+                <th>Red Pins</th>
+                <th>White Pins</th>
+            </tr>
+            {% for guess, result in zip(game.guesses, game.results) %}
+                <tr>
+                    {% for color in guess %}
+                        <td>
+                            <div class="color-ball" style="background-color: {{ ['purple', 'yellow', 'blue', 'green'][color - 1] }};"></div>
+                        </td>
+                    {% endfor %}
+                    <td>{{ result.red_pins }} red pins</td>
+                    <td>{{ result.white_pins }} white pins</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="glowing">
+
+            <span style="--i:1;"></span>
+
+            <span style="--i:2;"></span>
+
+            <span style="--i:3;"></span>
+
+          </div>
+
+          <div class="glowing">
+
+            <span style="--i:1;"></span>
+
+            <span style="--i:2;"></span>
+
+            <span style="--i:3;"></span>
+
+          </div>
+
+          <div class="glowing">
+
+            <span style="--i:1;"></span>
+
+            <span style="--i:2;"></span>
+
+            <span style="--i:3;"></span>
+
+          </div>
+
+          <div class="glowing">
+
+            <span style="--i:1;"></span>
+
+            <span style="--i:2;"></span>
+
+            <span style="--i:3;"></span>
+
+          </div>
+    </body>
+</html>

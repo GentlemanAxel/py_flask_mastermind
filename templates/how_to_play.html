@@ -1,0 +1,78 @@
+<!-- how_to_play.html -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mastermind Tutorial</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/logo.png') }}" />
+        <style>
+            .secret-code-ball {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border-radius: 80%;
+                margin-right: 40px;
+              }
+            .color-ball {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background-color: grey;
+                margin-right: 5px;
+            }
+            .color-input {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Mastermind Tutorial</h1>
+        <p>Welcome to the tutorial of Mastermind !</p>
+        <p>In this tutorial, I will show you how to play the game, and some tips to help you win.</p>
+
+        <h2>How to Play</h2>
+        <p>The game consists of a code, which is a sequence of four colors chosen from the colors (yellow, green, blue, and purple).</p>
+        <p>Your goal is to guess the code within 8 attempts. After each guess, you will receive feedback in the form of red and white pins:</p>
+        <ul>
+            <li>A red pin means that you have correctly guessed a color in the correct position.</li>
+            <li>A white pin means that you have correctly guessed a color, but it is in the wrong position.</li>
+            <li>No pin means that the color is not in the code.</li>
+        </ul>
+        <p>Using this feedback, you can refine your guesses and try to guess the code within the given attempts.</p>
+
+        <h2>Gameplay</h2>
+        <p>Below you will see four color balls. Each ball corresponds to a color that might be in the code. There can be several times the same colors and therefore the combinations can contain from 1 to 4 colors. Here are the 4 different colors:</p>
+        <ul>
+            <li><div class="color-ball" style="background-color: purple;"></div>Purple</li>
+            <li><div class="color-ball" style="background-color: yellow;"></div>Yellow</li>
+            <li><div class="color-ball" style="background-color: blue;"></div>Blue</li>
+            <li><div class="color-ball" style="background-color: green;"></div>Green</li>
+        </ul>
+        <h4>For exemple, the combinations that you must find during a game are of this form:</h4>
+
+        {% for color in howtoplay.secret_code %}
+            <div class="secret-code-ball" style="background-color: {{ ['purple', 'yellow', 'blue', 'green'][color - 1] }};"></div>
+        {% endfor %}
+
+        <p>You can select the color of each ball by clicking on it and press "p" (for the purple), "y" (for the yellow), "b" (for the blue) or "g" (for the green). Also, you can use the arrow keys to move between them and the up and down arrow keys to cycle through the available colors.</p>
+        <p>Your goal is to select the correct colors in the correct order.</p>
+        <p>After each guess, you will receive feedback in the form of red and white pins. The red pins indicate that you have correctly guessed a color in the correct position, while the white pins indicate that you have correctly guessed a color, but it is in the wrong position.</p>
+
+        <h2>Tips</h2>
+        <p>Here are some tips to help you win the game:</p>
+        <ul>
+            <li>Start by making a guess with each color. This will help you identify which colors are in the code.</li>
+            <li>So, eliminate colors that you know are not in the code. For example, if you have guessed purple and green in two different guesses, and neither of them have produced any pins, you can eliminate these colors.</li>
+            <li>Use the feedback to refine your guesses. If you get a red pin for a color that you just change, you know that it is in the correct position.</li>
+            <li>Look for patterns in the feedback. For example, if you get a white pin for a color in two different guesses, you know that this color is likely in the code, but in a different position.</li>
+            <li>Remember that you only have 8 attempts, so don't waste them by making random guesses. Use the feedback to make educated guesses.</li>
+        </ul>
+
+        <h2>Test The Game:</h2>
+        <p>If you want to start a new game, click on the button bellow.</p>
+        <form action="/playing" method="get">
+            <button type="submit">Normal Game</button>
+        </form>
+    </body>
+</html>

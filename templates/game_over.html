@@ -1,0 +1,71 @@
+<!-- game_over.html -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mastermind - Game Over</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/logo.png') }}" />
+        <style>
+          .secret-code-ball {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border-radius: 80%;
+            margin-right: 40px;
+          }
+        </style>
+    </head>
+    <body>
+        <h1>Game Finished</h1>
+        {% if result == "won" %}
+            <h1>Congratulations! You won in {{ num_tries }} tries.</h1>
+        {% else %}
+            <h1>Game Over! You lost after {{ num_tries }} tries.</h1>
+        {% endif %}
+        <h2>Secret code:</h2>
+            {% for color in game.secret_code %}
+                <div class="secret-code-ball" style="background-color: {{ ['purple', 'yellow', 'blue', 'green'][color - 1] }};"></div>
+            {% endfor %}
+        <p><a href="{{ url_for('index') }}">Play MasterMind</a></p>
+        <p><a href="{{ url_for('home') }}">Home Page</a></p>
+        <div class="glowing">
+
+            <span style="--i:1;"></span>
+
+            <span style="--i:2;"></span>
+
+            <span style="--i:3;"></span>
+
+          </div>
+
+          <div class="glowing">
+
+            <span style="--i:1;"></span>
+
+            <span style="--i:2;"></span>
+
+            <span style="--i:3;"></span>
+
+          </div>
+
+          <div class="glowing">
+
+            <span style="--i:1;"></span>
+
+            <span style="--i:2;"></span>
+
+            <span style="--i:3;"></span>
+
+          </div>
+
+          <div class="glowing">
+
+            <span style="--i:1;"></span>
+
+            <span style="--i:2;"></span>
+
+            <span style="--i:3;"></span>
+
+          </div>
+    </body>
+</html>

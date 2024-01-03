@@ -1,0 +1,63 @@
+<!-- game_history.html -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Game History</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/logo.png') }}" />
+        <style>
+            .color-ball {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background-color: grey;
+                margin-right: 5px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #821D30;
+            }
+            .color-input {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Evolution of Number of Tries Over Time</h2>
+        <img src="data:image/png;base64,{{ img }}" alt="Evolution of Number of Tries Over Time">
+        <br>
+        <a href="{{ url_for('home') }}">Back to Home</a>
+        <h1>Game History</h1>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Secret Code</th>
+                <th>Number of Tries</th>
+            </tr>
+            {% for game in games|reverse %}
+            <tr>
+                <td>{{ game["id"] }}</td>
+                <td>{{ game["date"] }}</td>
+                <td>
+                    {% for color in game["secret_code"] %}
+                        <div class="color-ball" style="background-color: {{ ['purple', 'yellow', 'blue', 'green'][color - 1] }};"></div>
+                    {% endfor %}
+                </td>
+                <td>{{ game["guesses"]|length }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
